@@ -34,9 +34,9 @@ SPEED = 10
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), 0, 32)
 
 # Заголовок окна игрового поля:
-score = 0  # Счет игры, увеличивается когда съедается яблоко
+SKORE = 0  # Счет игры, увеличивается когда съедается яблоко
 
-pygame.display.set_caption(f"Змейка. Скорость игры: {SPEED}, счет: {score}")
+pygame.display.set_caption(f"Змейка. Скорость игры: {SPEED}, счет: {SKORE}")
 
 # Настройка времени:
 clock = pygame.time.Clock()
@@ -181,7 +181,7 @@ def main():
     # Тут нужно создать экземпляры классов.
     apple = Apple()
     snake = Snake()
-    global score
+    global SKORE
     global SPEED
     while True:
         handle_keys(snake)
@@ -189,17 +189,17 @@ def main():
         if snake.get_head_position() == apple.position:
             snake.length += 1
             apple.randomize_position(snake.positions)
-            score += 1
+            SKORE += 1
             SPEED += 1
             pygame.display.set_caption(
-                f"Змейка. Скорость игры: {SPEED}, счет: {score}"
+                f"Змейка. Скорость игры: {SPEED}, счет: {SKORE}"
             )
         snake.draw()
         if snake.get_head_position() in snake.positions[1:]:
             snake.reset()
             apple.randomize_position(snake.positions)
             SPEED = 10
-            score = 0
+            SKORE = 0
         snake.move()
         screen.fill(BOARD_BACKGROUND_COLOR)
         snake.draw()
