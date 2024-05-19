@@ -74,7 +74,7 @@ class GameObject:
 class Apple(GameObject):
     """Класс Apple, наследуется от класса GameObject"""
 
-    def __init__(self, occupied_positions):
+    def __init__(self, occupied_positions=CENTER_SCREEN):
         """иницилизация яблока"""
         self.body_color = APPLE_COLOR
         self.position = self.randomize_position(occupied_positions)
