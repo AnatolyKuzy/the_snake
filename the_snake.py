@@ -50,7 +50,7 @@ class GameObject:
     """
 
     def __init__(self) -> None:
-        self.position = (CENTER_SCREEN)
+        self.position = CENTER_SCREEN
         self.body_color = None
 
     def draw(self, surface) -> None:
@@ -74,24 +74,24 @@ class GameObject:
 class Apple(GameObject):
     """Класс Apple, наследуется от класса GameObject"""
 
-    def __init__(self):
+    def __init__(self, occupied_positions):
         """иницилизация яблока"""
         self.body_color = APPLE_COLOR
-        self.position = self.randomize_position()
+        self.position = self.randomize_position(occupied_positions)
 
-    def randomize_position(self, posit=[]):
+    def randomize_position(self, occupied_positions):
         """устанавливает случайное положение яблока"""
         while True:
             self.position = (
                 randrange(0, SCREEN_WIDTH, 20),
                 randrange(0, SCREEN_HEIGHT, 20)
             )
-            if self.position not in posit:
+            if self.position not in occupied_positions:
                 return self.position
 
     def draw(self):
         """Отрисовывает яблоко на игровой поверхности"""
-        GameObject.draw_segment(self.position, self.body_color)
+        self.draw_segment(self.position, self.body_color)
 
 
 class Snake(GameObject):
@@ -118,10 +118,6 @@ class Snake(GameObject):
             (head_y + d_y * GRID_SIZE) % SCREEN_HEIGHT
         )
 
-        if self.get_head_position() in self.positions[1:]:
-            self.reset()
-            return
-
         self.positions.insert(0, new_position)
         if len(self.positions) > self.length:
             self.last = self.positions.pop()
@@ -131,12 +127,8 @@ class Snake(GameObject):
     def draw(self):
         """Отрисовывает змейку на игровой поверхности"""
         for position in self.positions:
-            GameObject.draw_segment(position, self.body_color)
-        head_rect = pygame.Rect(
-            self.get_head_position(), (GRID_SIZE, GRID_SIZE)
-        )
-        pygame.draw.rect(screen, self.body_color, head_rect)
-        pygame.draw.rect(screen, BORDER_COLOR, head_rect, 1)
+            self.draw_segment(position, self.body_color)
+        self.draw_segment(self.get_head_position(), self.body_color)
         if self.last:
             last_rect = pygame.Rect(self.last, (GRID_SIZE, GRID_SIZE))
             pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, last_rect)
@@ -179,8 +171,8 @@ def main():
     # Инициализация PyGame:
     pygame.init()
     # Тут нужно создать экземпляры классов.
-    apple = Apple()
     snake = Snake()
+    apple = Apple(snake.positions)
     global SKORE
     global SPEED
     while True:
