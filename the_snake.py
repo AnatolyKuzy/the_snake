@@ -9,9 +9,6 @@ GRID_WIDTH = SCREEN_WIDTH // GRID_SIZE
 GRID_HEIGHT = SCREEN_HEIGHT // GRID_SIZE
 CENTER_SCREEN = (SCREEN_WIDTH // 2), (SCREEN_HEIGHT // 2)
 
-# Константа для координат
-COORDINATE = [(int, int)]
-
 # Направления движения:
 UP = (0, -1)
 DOWN = (0, 1)
@@ -78,10 +75,10 @@ class Apple(GameObject):
     """Класс Apple, наследуется от класса GameObject"""
 
     # Если убрать значение по умолчанию, код не проходит автотесты
-    def __init__(self, occupied_positions=COORDINATE):
+    def __init__(self, occupied_positions=None):
         """иницилизация яблока"""
         self.body_color = APPLE_COLOR
-        self.position = self.randomize_position(occupied_positions)
+        self.position = self.randomize_position(occupied_positions or [])
 
     def randomize_position(self, occupied_positions):
         """устанавливает случайное положение яблока"""
